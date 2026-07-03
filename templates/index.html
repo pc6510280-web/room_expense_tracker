@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Expense Tracker</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+
+        <h1>🏠 Room Expense Tracker</h1>
+
+        <p>Track, Manage & Split Room Expenses Easily</p>
+
+        <a href="/export" class="download-btn">
+            📥 Download Excel
+        </a>
+
+    </div>
+
+
+    <!-- Add Expense -->
+
+    <div class="card">
+
+        <h2>Add Expense</h2>
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="user"
+                placeholder="👤 Enter Name"
+                required>
+
+            <input
+                type="text"
+                name="item"
+                placeholder="🛒 Enter Item"
+                required>
+
+            <input
+                type="number"
+                step="0.01"
+                min="1"
+                name="amount"
+                placeholder="₹ Enter Amount"
+                required>
+
+            <button type="submit">
+                ➕ Add Expense
+            </button>
+
+        </form>
+
+    </div>
+
+
+
+    <!-- Expense List -->
+
+    <div class="card">
+
+        <h2>Expense List</h2>
+
+        <table>
+
+            <thead>
+
+            <tr>
+
+                <th>ID</th>
+                <th>User</th>
+                <th>Item</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Action</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% if expenses %}
+
+                {% for expense in expenses %}
+
+                <tr>
+
+                    <td>{{ expense["id"] }}</td>
+
+                    <td>{{ expense["user"] }}</td>
+
+                    <td>{{ expense["item"] }}</td>
+
+                    <td>₹{{ "%.2f"|format(expense["amount"]) }}</td>
+
+                    <td>{{ expense["date"] }}</td>
+
+                    <td>
+
+                        <a href="/delete/{{ expense['id'] }}" class="delete-btn">
+                            🔒 Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            {% else %}
+
+                <tr>
+
+                    <td colspan="6" style="text-align:center; padding:20px;">
+                        No Expenses Added Yet
+                    </td>
+
+                </tr>
+
+            {% endif %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+
+    <!-- Summary -->
+
+    <div class="summary">
+
+        <div class="box">
+
+            <h3>Total Expense</h3>
+
+            <h1>₹{{ "%.2f"|format(total) }}</h1>
+
+        </div>
+
+        <div class="box">
+
+            <h3>Each Person Pays</h3>
+
+            <h1>₹{{ "%.2f"|format(per_person) }}</h1>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
